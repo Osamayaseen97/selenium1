@@ -1,0 +1,60 @@
+package ltuc;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
+public class project1 {
+	
+	WebDriver driver;
+	SoftAssert myAssertion;
+	
+	@BeforeTest
+	public void myBeforeTest() {
+		// Set the path to the Chrome WebDriver executable
+		System.setProperty("webdriver.chrome.driver", "path_to_chromedriver.exe");
+		
+		// Initialize WebDriver and SoftAssert in BeforeTest
+		driver = new ChromeDriver();
+		myAssertion = new SoftAssert();
+	}
+	
+	@Test
+	public void myTest() {
+		// Navigate to the website
+		driver.get("https://global.almosafer.com/ar");
+		System.setProperty("webdriver.chrome.driver", "path_to_chromedriver.exe");
+
+
+		// Assertion 1: Check the language
+		WebElement languageElement = driver.findElement(By.id("language"));
+		String actualLanguage = languageElement.getText();
+		String expectedLanguage = "عربي"; // Update with the expected language
+		myAssertion.assertEquals(actualLanguage, expectedLanguage, "Language assertion failed.");
+
+		// Assertion 2: Check the currency
+		WebElement currencyElement = driver.findElement(By.id("currency"));
+		String actualCurrency = currencyElement.getText();
+		String expectedCurrency = "SAR"; // Update with the expected currency
+		myAssertion.assertEquals(actualCurrency, expectedCurrency, "Currency assertion failed.");
+
+		// Assertion 3: Check the hotel tab is selected
+		WebElement hotelTabElement = driver.findElement(By.id("hotel-tab"));
+		boolean isHotelTabSelected = hotelTabElement.isSelected();
+		myAssertion.assertTrue(isHotelTabSelected, "Hotel tab assertion failed.");
+	}
+	
+	@AfterTest
+	public void myAfterTest() {
+		// Perform all assertions and report failures in AfterTest
+		myAssertion.assertAll();
+		
+		// Close the browser
+		driver.quit();
+	}
+}

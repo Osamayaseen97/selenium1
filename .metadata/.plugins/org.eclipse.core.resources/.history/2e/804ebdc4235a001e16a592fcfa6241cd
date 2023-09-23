@@ -1,0 +1,69 @@
+package ltuc;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class project1 {
+    
+    WebDriver driver;
+    SoftAssert myAssertion;
+
+    @BeforeTest
+    public void myBeforeTest() {
+        // Setup ChromeDriver using WebDriverManager
+        WebDriverManager.chromedriver().setup();
+
+        // Configure Chrome options if needed
+        ChromeOptions options = new ChromeOptions();
+        // Add any additional options here
+
+        // Initialize WebDriver and SoftAssert in BeforeTest
+        driver = new ChromeDriver(options);
+        myAssertion = new SoftAssert();
+    }
+
+    @Test
+    public void myTest() {
+        // Navigate to the website
+        driver.get("https://global.almosafer.com/ar");
+
+        // Wait for the language element to become visible
+        WebDriverWait wait = new WebDriverWait(driver, 10); // Adjust the timeout as needed
+        WebElement languageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("language")));
+
+        // Assertion 1: Check the language
+        String actualLanguage = languageElement.getText();
+        String expectedLanguage = "عربي"; // Update with the expected language
+        myAssertion.assertEquals(actualLanguage, expectedLanguage, "Language assertion failed.");
+
+        // Assertion 2: Check the currency
+        WebElement currencyElement = driver.findElement(By.id("currency"));
+        String actualCurrency = currencyElement.getText();
+        String expectedCurrency = "SAR"; // Update with the expected currency
+        myAssertion.assertEquals(actualCurrency, expectedCurrency, "Currency assertion failed.");
+
+        // Assertion 3: Check the hotel tab is selected
+        WebElement hotelTabElement = driver.findElement(By.id("hotel-tab"));
+        boolean isHotelTabSelected = hotelTabElement.isSelected();
+        myAssertion.assertTrue(isHotelTabSelected, "Hotel tab assertion failed.");
+    }
+
+
+    @AfterTest
+    public void myAfterTest() {
+        // Perform all assertions and report failures in AfterTest
+        myAssertion.assertAll();
+
+        // Close the browser
+        driver.quit();
+    }
+}
